@@ -17,23 +17,30 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ master ]
-  schedule:
-    - cron: '20 * * * *'
 
 jobs:
   Anchore-Build-Scan:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout the code
-      uses: actions/checkout@v2
-    - name: Build the Docker image
+#    - name: Set up Docker Buildx
+#      uses: docker/setup-buildx-action@v1
+
+    - name: Build the container image
       run: docker build . --file Dockerfile --tag localbuild/testimage:latest
-    - name: Run the Anchore scan action itself with GitHub Advanced Security code scanning integration enabled
-      uses: anchore/scan-action@b08527d5ae7f7dc76f9621edb6e49eaf47933ccd
+
+    - name: Scan image
+      uses: anchore/scan-action@v3
+      id: scan
       with:
-        image: "localbuild/testimage:latest"
+        image: localbuild/testimage:latest
+#        fail-build: true
+#        severity-cutoff: critical
         acs-report-enable: true
-    - name: Upload Anchore Scan Report
-      uses: github/codeql-action/upload-sarif@v1
-      with:
-        sarif_file: results.sarif
+
+    - name: Inspect action SARIF report
+      run: cat ${{ steps.scan.outputs.sarif }}
+
+#    - name: upload Anchore scan SARIF report
+#      uses: github/codeql-action/upload-sarif@v1
+#      with:
+#        sarif_file: ${{ steps.scab.outputs.sarif }}
