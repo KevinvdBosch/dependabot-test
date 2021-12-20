@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 as builder
+FROM ubuntu:20.04 as builder
 
 ARG FLAMINGO_VIEWER_VERSION=5.6.8
 ARG FLAMINGO_ADMIN_VERSION=5.6.8
