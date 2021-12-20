@@ -12,7 +12,7 @@ RUN apt-get update \
     && wget -O /opt/viewer.war "https://repo.b3p.nl/nexus/repository/public/org/flamingo-mc/viewer/${FLAMINGO_VIEWER_VERSION}/viewer-${FLAMINGO_VIEWER_VERSION}.war"
 
 
-FROM tomcat:9.0-jre11
+FROM tomcat:10.0.14-jre11
 LABEL maintainer="Kevin van den Bosch <kevin.van.den.bosch@idgis.nl>"
 
 # Install packages
